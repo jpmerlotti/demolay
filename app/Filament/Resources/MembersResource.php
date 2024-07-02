@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -45,7 +46,12 @@ class MembersResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nome'),
+                TextColumn::make('name')->label('Nome')->alignCenter()
+                ->formatStateUsing(function (string $state) {
+                    $arr = explode(' ', $state);
+                    $state = $arr[0] . ' ' . $arr[count($arr) - 1];
+                    return $state;
+                }),
                 TextColumn::make('phone')->label('Telefone')->alignCenter()
                 ->copyable()->copyMessageDuration(1000)->copyMessage('Celular Copiado!'),
                 TextColumn::make('sisdm')->label('ID')->alignCenter()
@@ -65,11 +71,16 @@ class MembersResource extends Resource
                 })
             ])
             ->filters([
-                //
+                SelectFilter::make('is_active')->label('Ativo')
+                ->options([
+                    true => 'Sim',
+                    false => 'Não'
+                ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
-            ]);
+            ])
+            ->emptyStateHeading('Nenhum demolay registrado ainda.');
     }
 
     public static function getRelations(): array
