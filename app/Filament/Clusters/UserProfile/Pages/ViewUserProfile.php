@@ -20,11 +20,13 @@ class ViewUserProfile extends Page implements HasInfolists
     use InteractsWithFormActions;
     use InteractsWithInfolists;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-s-user';
 
     protected static ?string $navigationLabel = 'Perfil';
 
-    protected static ?string $slug = 'me';
+    protected static ?string $title = 'Ver Perfil';
+
+    protected static ?string $slug = 'Me';
 
     protected ?string $heading = '';
 
@@ -52,13 +54,13 @@ class ViewUserProfile extends Page implements HasInfolists
                         TextEntry::make('email')
                             ->label('E-mail'),
                     ])
-                    ->icon('heroicon-o-user'),
+                    ->icon('heroicon-s-user'),
                 Section::make('Dados da Conta')
                     ->columns([
                         'default' => 1,
                         'lg' => 3,
                     ])
-                    ->icon('heroicon-o-information-circle'),
+                    ->icon('heroicon-s-information-circle'),
             ]);
     }
 }

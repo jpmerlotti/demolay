@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\TransactionTypesEnum;
-use App\Models\Vault;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('leadings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Vault::class, 'vault_id');
-            $table->enum('type', array_column(TransactionTypesEnum::cases(), 'value'));
-            $table->integer('amount_cents');
-            $table->string('description')->nullable();
+            $table->date('start');
+            $table->boolean('is_active');
+            $table->date('end')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('leadings');
     }
 };
