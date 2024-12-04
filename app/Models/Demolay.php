@@ -23,6 +23,11 @@ class Demolay extends Model
         'chapter_id',
     ];
 
+    public static function findByName(string $name): ?Demolay
+    {
+        return Demolay::where('name', 'like', $name)->first();
+    }
+
     public function getAge(): int
     {
         return floor(now()->diffInYears($this->birthdate) * -1);
@@ -31,5 +36,10 @@ class Demolay extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function chapter(): BelongsTo
+    {
+        return $this->belongsTo(Chapter::class);
     }
 }

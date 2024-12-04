@@ -3,9 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\MembersResource\Pages;
-use App\Filament\Resources\MembersResource\RelationManagers;
 use App\Models\Demolay;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -15,14 +13,15 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class MembersResource extends Resource
 {
     protected static ?string $model = Demolay::class;
+
     protected static ?string $navigationGroup = 'Membros';
+
     protected static ?string $navigationLabel = 'Membros';
+
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -38,7 +37,7 @@ class MembersResource extends Resource
                 DatePicker::make('birthdate')->label('Data de Nascimento')->required(true)
                     ->maxDate(now()->subYears(12)->toDateString()),
                 Toggle::make('is_active')->label('Ativo')->default(true)
-                    ->onColor('success')->offColor('danger')->inLine(false)
+                    ->onColor('success')->offColor('danger')->inLine(false),
             ]);
     }
 
@@ -47,40 +46,42 @@ class MembersResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Nome')->alignCenter()
-                ->formatStateUsing(function (string $state) {
-                    $arr = explode(' ', $state);
-                    $state = $arr[0] . ' ' . $arr[count($arr) - 1];
-                    return $state;
-                }),
+                    ->formatStateUsing(function (string $state) {
+                        $arr = explode(' ', $state);
+                        $state = $arr[0].' '.$arr[count($arr) - 1];
+
+                        return $state;
+                    }),
                 TextColumn::make('phone')->label('Telefone')->alignCenter()
-                ->copyable()->copyMessageDuration(1000)->copyMessage('Celular Copiado!'),
+                    ->copyable()->copyMessageDuration(1000)->copyMessage('Celular Copiado!'),
                 TextColumn::make('sisdm')->label('ID')->alignCenter()
-                ->copyable()->copyMessageDuration(1000)->copyMessage('ID Copiado!')
-                ->formatStateUsing(fn (?string $state): string => $state ?? '--'),
+                    ->copyable()->copyMessageDuration(1000)->copyMessage('ID Copiado!')
+                    ->formatStateUsing(fn (?string $state): string => $state ?? '--'),
                 TextColumn::make('id')->label('Idade')->alignCenter()
-                ->formatStateUsing(function (Demolay $record) {
-                    return $record->getAge() . ' anos';
-                }),
+                    ->formatStateUsing(function (Demolay $record) {
+                        return $record->getAge().' anos';
+                    }),
                 TextColumn::make('is_active')->label('Ativo')->alignCenter()->badge()
-                ->color(fn (int $state): string => match ($state) {
-                    1 => 'success',
-                    0 => 'danger'
-                })->formatStateUsing(fn (int $state): string => match ($state) {
-                    1 => 'Sim',
-                    0 => 'Não'
-                })
+                    ->color(fn (int $state): string => match ($state) {
+                        1 => 'success',
+                        0 => 'danger'
+                    })->formatStateUsing(fn (int $state): string => match ($state) {
+                        1 => 'Sim',
+                        0 => 'Não'
+                    }),
             ])
             ->filters([
                 SelectFilter::make('is_active')->label('Ativo')
-                ->options([
-                    true => 'Sim',
-                    false => 'Não'
-                ])
+                    ->options([
+                        true => 'Sim',
+                        false => 'Não',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editar'),
             ])
-            ->emptyStateHeading('Nenhum demolay registrado ainda.');
+            ->emptyStateHeading('Nenhum demolay registrado ainda.')
+            ->paginated([10, 15, 20, 25, 50, 100]);
     }
 
     public static function getRelations(): array

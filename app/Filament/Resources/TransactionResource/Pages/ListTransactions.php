@@ -3,13 +3,14 @@
 namespace App\Filament\Resources\TransactionResource\Pages;
 
 use App\Filament\Resources\TransactionResource;
-use App\Filament\Resources\TransactionResource\Widgets\BalanceOverview;
+use App\Filament\Widgets\BalanceOverview;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListTransactions extends ListRecords
 {
     protected static string $resource = TransactionResource::class;
+
     protected static ?string $title = 'Histórico de Transações';
 
     protected function getHeaderWidgets(): array

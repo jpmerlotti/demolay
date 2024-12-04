@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Chapter;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('leadings', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Chapter::class, 'chapter_id');
             $table->date('start');
             $table->boolean('is_active');
             $table->date('end')->nullable();

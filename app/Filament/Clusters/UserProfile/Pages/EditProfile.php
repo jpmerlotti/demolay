@@ -3,8 +3,8 @@
 namespace App\Filament\Clusters\UserProfile\Pages;
 
 use App\Filament\Clusters\UserProfile;
-use App\Models\User;
 use App\Models\Demolay;
+use App\Models\User;
 use Exception;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -37,17 +37,16 @@ class EditProfile extends Page implements HasForms
     public ?array $data = [];
 
     public User $user;
+
     public Demolay $demolay;
 
     public function mount(): void
     {
         $this->user = auth()->user();
-        $this->demolay = $this->user->demolay()->first();
-        // @phpstan-ignore-next-line
         $this->form->fill([
-            'name' => $this->user->name,
+            'name' => $this->user->demolay->name,
             'email' => $this->user->email,
-            'sisdm' => $this->demolay->sisdm,
+            'sisdm' => $this->user->demolay->sisdm,
         ]);
     }
 
@@ -79,6 +78,13 @@ class EditProfile extends Page implements HasForms
                                 'required' => 'O email é obrigatório.',
                                 'email' => 'O email deve ser válido.',
                             ]),
+                        TextInput::make('demolay.sisdm')
+                            ->label('SISDM')
+                            ->required()
+                            ->rules('numeric')
+                            ->validationMessages([
+                                'numeric' => 'O ID SISDM é composto apenas por números',
+                            ]),
                     ])
                     ->icon('heroicon-s-pencil-square'),
             ])->statePath('data');
@@ -86,12 +92,12 @@ class EditProfile extends Page implements HasForms
 
     public function submit(): void
     {
-        // @phpstan-ignore-next-line
-        $data = $this->form->getState();
-        $sisdm = $data['sisdm'];
+        $userData = $this->form->getState()['email'];
+        unset($this->form->getState()['email']);
+        $demolayData = $this->form->getState();
         try {
-            $this->user->update($data);
-            $this->demolay()->first()->update($sisdm);
+            $this->user->update(['email' => $userData]);
+            $this->user->demolay->update($demolayData);
 
             Notification::make()
                 ->title('Perfil Atualizado')

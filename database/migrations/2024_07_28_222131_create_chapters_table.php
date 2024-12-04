@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Vault;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,10 @@ return new class extends Migration
     {
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Vault::class, 'vault_id');
             $table->string('name');
+            $table->string('tenant');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

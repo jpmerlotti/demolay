@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('demolays', function (Blueprint $table) {
             $table->id()->primary();
+            $table->foreignIdFor(Chapter::class, 'chapter_id');
+            $table->foreignIdFor(User::class, 'user_id')->nullable();
+            $table->string('name');
             $table->string('phone')->nullable();
             $table->string('sisdm')->unique()->nullable();
             $table->date('birthdate');
             $table->boolean('is_active')->default(true);
-            $table->foreignIdFor(User::class, 'user_id');
-            $table->foreignIdFor(Chapter::class, 'chapter_id');
             $table->timestamps();
 
         });

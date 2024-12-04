@@ -1,6 +1,8 @@
 <?php
 
 use App\Enums\UserTypesEnum;
+use App\Models\Chapter;
+use App\Models\Demolay;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +16,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->primary();
+            $table->foreignIdFor(Chapter::class, 'chapter_id');
+            $table->foreignIdFor(Demolay::class, 'demolay_id')->nullable();
             $table->enum('type', array_column(UserTypesEnum::cases(), 'value'))
                 ->default(UserTypesEnum::dm->value);
-            $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

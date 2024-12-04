@@ -9,10 +9,12 @@ use Filament\Pages\Auth\Register as BaseRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Password;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+use Filament\Actions\Action;
 use Filament\Events\Auth\Registered;
 use Filament\Facades\Filament;
 use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
 use Filament\Notifications\Notification;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\DB;
 
 class Registration extends BaseRegistration
@@ -48,8 +50,8 @@ class Registration extends BaseRegistration
             $this->getPasswordFormComponent()->label('Senha')
                 ->rules([
                     Password::default()
-                    ->mixedCase()
-                    ->numbers()
+                        ->mixedCase()
+                        ->numbers()
                 ])->validationMessages([
                     'required' => 'A senha é obrigatória',
                     'min' => 'A senha deve ter pelo menos 8 caracteres',
@@ -114,5 +116,15 @@ class Registration extends BaseRegistration
         $user->demolay()->create($data);
 
         return $user;
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return 'Registrar';
+    }
+
+    public function loginAction(): Action
+    {
+        return parent::loginAction()->label('Já tem uma conta? Faça login aqui.');
     }
 }

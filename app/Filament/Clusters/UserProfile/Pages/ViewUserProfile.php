@@ -3,17 +3,14 @@
 namespace App\Filament\Clusters\UserProfile\Pages;
 
 use App\Filament\Clusters\UserProfile;
-use App\Infolists\Components\GenerateApiKey;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
-use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
-use Filament\Support\Enums\IconPosition;
-use Illuminate\Support\HtmlString;
+use Illuminate\Database\Eloquent\Model;
 
 class ViewUserProfile extends Page implements HasInfolists
 {
@@ -49,7 +46,7 @@ class ViewUserProfile extends Page implements HasInfolists
                         'md' => 2,
                     ])
                     ->schema([
-                        TextEntry::make('name')
+                        TextEntry::make('demolay.name')
                             ->label('Nome'),
                         TextEntry::make('email')
                             ->label('E-mail'),
@@ -59,6 +56,20 @@ class ViewUserProfile extends Page implements HasInfolists
                     ->columns([
                         'default' => 1,
                         'lg' => 3,
+                    ])
+                    ->schema([
+                        TextEntry::make('demolay.sisdm')
+                            ->label('SISDM'),
+                        TextEntry::make('demolay.phone')
+                            ->label('Telefone'),
+                        TextEntry::make('demolay')
+                            ->label('idade')
+                            ->formatStateUsing(fn (Model $record) => $record->demolay->getAge().' anos'),
+                        TextEntry::make('demolay.is_active')
+                            ->label('Ativo')
+                            ->badge()
+                            ->color(fn (Model $record): string => $record->demolay->is_active ? 'success' : 'danger')
+                            ->formatStateUsing(fn (Model $record): string => $record->demolay->is_active ? 'Sim' : 'Não'),
                     ])
                     ->icon('heroicon-s-information-circle'),
             ]);
