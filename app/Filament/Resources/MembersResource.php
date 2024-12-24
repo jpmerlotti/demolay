@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\Secretariat;
 use App\Filament\Resources\MembersResource\Pages;
 use App\Models\Demolay;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -17,6 +19,7 @@ use Filament\Tables\Table;
 class MembersResource extends Resource
 {
     protected static ?string $model = Demolay::class;
+    protected static ?string $cluster = Secretariat::class;
 
     protected static ?string $navigationGroup = 'Membros';
 
@@ -24,6 +27,8 @@ class MembersResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
@@ -48,7 +53,7 @@ class MembersResource extends Resource
                 TextColumn::make('name')->label('Nome')->alignCenter()
                     ->formatStateUsing(function (string $state) {
                         $arr = explode(' ', $state);
-                        $state = $arr[0].' '.$arr[count($arr) - 1];
+                        $state = $arr[0] . ' ' . $arr[count($arr) - 1];
 
                         return $state;
                     }),
@@ -56,16 +61,16 @@ class MembersResource extends Resource
                     ->copyable()->copyMessageDuration(1000)->copyMessage('Celular Copiado!'),
                 TextColumn::make('sisdm')->label('ID')->alignCenter()
                     ->copyable()->copyMessageDuration(1000)->copyMessage('ID Copiado!')
-                    ->formatStateUsing(fn (?string $state): string => $state ?? '--'),
+                    ->formatStateUsing(fn(?string $state): string => $state ?? '--'),
                 TextColumn::make('id')->label('Idade')->alignCenter()
                     ->formatStateUsing(function (Demolay $record) {
-                        return $record->getAge().' anos';
+                        return $record->getAge() . ' anos';
                     }),
                 TextColumn::make('is_active')->label('Ativo')->alignCenter()->badge()
-                    ->color(fn (int $state): string => match ($state) {
+                    ->color(fn(int $state): string => match ($state) {
                         1 => 'success',
                         0 => 'danger'
-                    })->formatStateUsing(fn (int $state): string => match ($state) {
+                    })->formatStateUsing(fn(int $state): string => match ($state) {
                         1 => 'Sim',
                         0 => 'Não'
                     }),

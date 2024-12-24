@@ -25,6 +25,7 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->brandName('GoDM ADMIN')
             ->id('admin')
             ->path('admin')
             ->colors([

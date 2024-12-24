@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->uuid('id')->primary();
             $table->foreignIdFor(Chapter::class, 'chapter_id');
             $table->foreignIdFor(Demolay::class, 'demolay_id')->nullable();
             $table->enum('type', array_column(UserTypesEnum::cases(), 'value'))

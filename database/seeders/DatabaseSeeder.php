@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'chapter_id' => 1,
-            'demolay_id' => 1,
+            'chapter_id' => Chapter::all()->first(),
+            'demolay_id' => Chapter::all()->first(),
             'email' => 'test@example.com',
             'password' => Hash::make('12345678'),
         ]);
@@ -32,18 +32,19 @@ class DatabaseSeeder extends Seeder
             'phone' => '(11) 11111-1111',
             'sisdm' => '11111',
             'is_active' => false,
-            'user_id' => 1,
-            'chapter_id' => 1,
+            'user_id' => User::all()->first(),
+            'chapter_id' => Chapter::all()->first(),
         ]);
 
         Chapter::factory()->create([
-            'vault_id' => 1,
-            'name' => fake()->name(),
+            'vault_id' => Vault::all()->first(),
+            'name' => 'Capítulo Jales',
             'tenant' => 'capitulo_jales',
+            'logo' => '',
         ]);
 
         Vault::factory()->create([
-            'chapter_id' => 1,
+            'chapter_id' => Chapter::all()->first(),
         ]);
 
         Transaction::factory(5)->create();

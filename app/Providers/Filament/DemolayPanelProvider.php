@@ -36,13 +36,21 @@ class DemolayPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->tenant(Chapter::class, 'tenant')
-            // ->tenantDomain('{tenant:tenant}.godm.dev')
+            // ->tenantDomain('{tenant:tenant}.localhost')
             ->tenantMenu(false)
+            // ->path('demolay')
             ->id('demolay')
-            ->brandName('goDM')
-            ->brandLogo(fn(): string => 'https://joaopedromerlotti.com.br/images/branco.png')
-            ->brandLogoHeight('8rem')
-            ->darkModeBrandLogo('https://joaopedromerlotti.com.br/images/preto.png')
+            ->brandName('GoDM')
+            // ->brandLogo(fn(): string => 'https://joaopedromerlotti.com.br/images/branco.png')
+            // ->brandLogoHeight('8rem')
+            // ->darkModeBrandLogo('https://joaopedromerlotti.com.br/images/preto.png')
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->label(fn() => auth()->user()->demolay->name)
+                    ->url(fn(): string => ViewUserProfile::getUrl()),
+                'logout' => MenuItem::make()
+                    ->label('Sair')
+            ])
             ->breadcrumbs(false)
             ->login(Login::class)
             ->registration(Registration::class)
@@ -77,17 +85,10 @@ class DemolayPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->userMenuItems([
-                'profile' => MenuItem::make()
-                    ->label('Meu Perfil')
-                    ->icon('heroicon-s-user')
-                    ->url(fn(): string => ViewUserProfile::getUrl()),
-            ])
             ->navigationItems([
                 NavigationItem::make('Admin')
                     ->label('Painel de Administrador')
                     ->icon('heroicon-s-lock-closed')
-                    ->sort(fn(): int => 999)
                     ->visible(fn(): bool => auth()->user()->type === 'admin')
                     ->hidden(fn(): bool => auth()->user()->type != 'admin')
                     ->url(fn() => route('filament.admin.pages.admin-dashboard'))

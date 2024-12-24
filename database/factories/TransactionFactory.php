@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\TransactionTypesEnum;
+use App\Models\Vault;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,7 @@ class TransactionFactory extends Factory
             'type' => fake()->randomElement(TransactionTypesEnum::cases()),
             'amount_cents' => fake()->randomNumber(7),
             'description' => fake()->text(100),
-            'vault_id' => 1,
+            'vault_id' => Vault::all()->first(),
         ];
     }
 }

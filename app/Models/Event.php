@@ -11,11 +11,18 @@ class Event extends Model
     use HasFactory;
 
     public $fillable = [
+        'chapter_id',
+        'leading_id',
         'title',
         'location',
         'description',
         'date',
     ];
+
+    public function chapter(): BelongsTo
+    {
+        return $this->belongsTo(Chapter::class);
+    }
 
     public function leading(): BelongsTo
     {

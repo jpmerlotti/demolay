@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Chapter;
 use App\Models\Leading;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Chapter::class, 'chapter_id');
             $table->foreignIdFor(Leading::class, 'leading_id');
             $table->string('title');
             $table->text('description');
